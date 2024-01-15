@@ -34,3 +34,13 @@ services:
         - 8080:8080
       command:
         - start-dev
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_saml
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/cert:/etc/nginx/cert
