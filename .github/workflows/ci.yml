@@ -26,19 +26,19 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm install
+        run: make install
 
       - name: Lint
-        run: npm run lint
+        run: make lint
 
       - name: TextLint
-        run: npm run textlint
+        run: make lint_text
 
       - name: Check format
-        run: npm run format:check
+        run: make format_check
 
       - name: Build
-        run: npm run build
+        run: make build
 
       - name: Test
-        run: npm run test:coverage
+        run: make test_coverage
