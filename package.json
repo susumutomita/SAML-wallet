@@ -8,7 +8,7 @@
     "install": "cd packages/frontend && npm install && cd ../backend && npm install",
     "dev": "cd packages/frontend && npm run dev",
     "build": "cd packages/frontend && npm run build && cd ../backend && npm run build",
-    "clean": "rimraf node_modules out && cd packages/frontend && rimraf node_modules out && cd ../backend && rimraf node_modules out",
+    "clean": "npx rimraf node_modules out && cd packages/frontend && npx rimraf node_modules out  dist coverage && cd ../backend && npx rimraf node_modules out dist coverage",
     "test": "cd packages/frontend && npm run test && cd ../backend && npm run test",
     "test:coverage": "cd packages/frontend && npm run test:coverage && cd ../backend && npm run test:coverage",
     "test:watch": "cd packages/frontend && npm run test:watch && cd ../backend && npm run test:watch",
@@ -18,7 +18,8 @@
     "lint-staged": "lint-staged",
     "format": "cd packages/frontend && npm run format && cd ../backend && npm run format",
     "format:check": "cd packages/frontend && npm run format:check && cd ../backend && npm run format:check",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "cd packages/frontend && npm start && cd ../backend && npm start"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.19.0",
