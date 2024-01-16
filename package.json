@@ -22,7 +22,6 @@
     "start": "cd packages/frontend && npm start && cd ../backend && npm start"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
     "husky": "^7.0.0",
     "lint-staged": "^12.0.0",
     "prettier": "^2.4.0",
