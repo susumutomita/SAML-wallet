@@ -10,12 +10,13 @@ test:
 lint:
 	npx eslint . --ext .ts,.tsx
 
+.PHONY: lint_text
+lint_text:
+	npx textlint ./README.md
+
 .PHONY: format
 format:
 	npx prettier --write .
-
-.PHONY: before_commit
-before_commit: test lint format
 
 .PHONY: run
 run:
@@ -24,3 +25,6 @@ run:
 .PHONY: build
 build:
 	npm run build
+
+.PHONY: before_commit
+before_commit: test lint format
