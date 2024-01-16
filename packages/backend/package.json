@@ -10,8 +10,7 @@
     "build": "tsc",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,json,md}'",
-    "format:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json,css}'",
-    "clean": "rimraf dist"
+    "format:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json,css}'"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
