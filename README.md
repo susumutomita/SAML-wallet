@@ -1,3 +1,5 @@
+[![CI](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml)
+
 # SAML-Wallet Project Setup Guide
 
 This README explains how to set up the Identity Provider (IDP) Keycloak and other services for the SAML-Wallet project using Docker.
