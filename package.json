@@ -1,0 +1,8 @@
+{
+  "name": "SAML-wallet",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/susumutomita/SAML-wallet.git",
+  "author": "Susumu Tomita <oyster880@gmail.com>",
+  "license": "MIT"
+}
