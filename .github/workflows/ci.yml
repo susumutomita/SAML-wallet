@@ -28,11 +28,17 @@ jobs:
       - name: Install dependencies
         run: make install
 
+      - name: Lint
+        run: make lint
+
+      - name: TextLint
+        run: make lint_text
+
+      - name: Check format
+        run: make format_check
+
       - name: Build
         run: make build
 
       - name: Test
         run: make test
-
-      - name: Lint
-        run: make lint

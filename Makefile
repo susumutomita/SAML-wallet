@@ -18,6 +18,10 @@ lint_text:
 format:
 	npx prettier --write .
 
+.PHONY: format_check
+format_check:
+	npx prettier --check .
+
 .PHONY: run
 run:
 	npm start
@@ -27,4 +31,4 @@ build:
 	npm run build
 
 .PHONY: before_commit
-before_commit: test lint format
+before_commit: format_check lint lint_text test
