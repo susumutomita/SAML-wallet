@@ -1,4 +1,6 @@
-[![CI](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml)
+<!-- textlint-disable ja-technical-writing/sentence-length -->
+
+[![CI](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml)![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/susumutomita/SAML-wallet)![GitHub top language](https://img.shields.io/github/languages/top/susumutomita/SAML-wallet)![GitHub pull requests](https://img.shields.io/github/issues-pr/susumutomita/SAML-wallet)![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/susumutomita/SAML-wallet)![GitHub repo size](https://img.shields.io/github/repo-size/susumutomita/SAML-wallet)[![Tryvy](https://github.com/susumutomita/SAML-wallet/actions/workflows/tryvy.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/tryvy.yml)
 
 # SAML-Wallet Project Setup Guide
 
