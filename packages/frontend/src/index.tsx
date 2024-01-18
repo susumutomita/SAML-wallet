@@ -10,4 +10,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const root = document.getElementById('root');
+if (root !== null) {
+  ReactDOM.createRoot(root).render(<App />);
+}
