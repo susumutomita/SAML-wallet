@@ -19,7 +19,8 @@
     "format": "cd packages/frontend && npm run format && cd ../backend && npm run format",
     "format:check": "cd packages/frontend && npm run format:check && cd ../backend && npm run format:check",
     "prepare": "husky install",
-    "start": "cd packages/frontend && npm start && cd ../backend && npm start"
+    "start:frontend": "cd packages/frontend && npm start && cd ../backend && npm start",
+    "start:backend": "cd packages/backend && npm start"
   },
   "devDependencies": {
     "husky": "^7.0.0",

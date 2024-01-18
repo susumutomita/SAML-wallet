@@ -45,6 +45,10 @@ format_check:
 .PHONY: before_commit
 before_commit: test format lint
 
-.PHONY: run
-run:
-	npm run start
+.PHONY: run_frontend
+run_frontend:
+	npm run start:frontend
+
+.PHONY: run_backend
+run_backend:
+	npm run start:backend
