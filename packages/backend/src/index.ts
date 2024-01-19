@@ -9,7 +9,8 @@ import url from 'url';
 import { Strategy as SamlStrategy } from 'passport-saml';
 
 const port: string | number = process.env.PORT || 3000;
-const callbackBaseUrl: string = process.env.CALLBACK_BASE_URL || `http://localhost:${port}/`;
+const callbackBaseUrl: string =
+  process.env.CALLBACK_BASE_URL || `http://localhost:${port}/`;
 let samlSpKey: string | null = null;
 if (typeof process.env.SAML_SP_KEY !== 'undefined') {
   samlSpKey = `-----BEGIN PRIVATE KEY-----\n${process.env.SAML_SP_KEY}\n-----END PRIVATE KEY-----`;
@@ -20,8 +21,8 @@ let samlStrategy = new SamlStrategy(
     callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
     entryPoint: process.env.SAML_ENTRY_POINT,
     issuer: 'passport-saml',
-    cert: process.env.SAML_IDP_CERT || "",
-    decryptionPvk: samlSpKey || "",
+    cert: process.env.SAML_IDP_CERT || '',
+    decryptionPvk: samlSpKey || '',
   },
   function (profile: any, done: any) {
     let user: any = {};
@@ -47,26 +48,26 @@ app.set('view engine', 'ejs');
 
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production"
-  }
-}));
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+    },
+  })
+);
 app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/',
-  function (req: express.Request, res: express.Response) {
-    res.render('home', { user: req.user });
-  }
-);
+app.get('/', function (req: express.Request, res: express.Response) {
+  res.render('home', { user: req.user });
+});
 
 app.get('/logout', function (req: express.Request, res: express.Response) {
   req.logout(function (err) {
@@ -77,11 +78,10 @@ app.get('/logout', function (req: express.Request, res: express.Response) {
   });
 });
 
-app.get('/saml/login',
-  passport.authenticate('saml')
-);
+app.get('/saml/login', passport.authenticate('saml'));
 
-app.post('/saml/login/callback',
+app.post(
+  '/saml/login/callback',
   passport.authenticate('saml', { failureRedirect: '/' }),
   function (req: express.Request, res: express.Response) {
     let walletCreated = createWallet((req.user as any).saml);
@@ -98,15 +98,18 @@ function createWallet(user: any): boolean {
   return true;
 }
 
-app.get('/saml/metadata',
+app.get(
+  '/saml/metadata',
   function (req: express.Request, res: express.Response) {
     let samlSpCert: string | null = null;
     if (typeof process.env.SAML_SP_CERT !== 'undefined') {
       samlSpCert = `-----BEGIN CERTIFICATE-----\n${process.env.SAML_SP_CERT}\n-----END CERTIFICATE-----`;
     }
     res.type('application/xml');
-    res.send((samlStrategy.generateServiceProviderMetadata(samlSpCert)));
+    res.send(samlStrategy.generateServiceProviderMetadata(samlSpCert));
   }
 );
 
-app.listen(Number(port), '0.0.0.0', () => console.log(`Listening on port ${port}`));
+app.listen(Number(port), '0.0.0.0', () =>
+  console.log(`Listening on port ${port}`)
+);
