@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import session from 'express-session';
@@ -66,7 +69,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', function (req: express.Request, res: express.Response) {
-  res.render('home', { user: req.user });
+  res.status(200).send('Hello');
 });
 
 app.get('/logout', function (req: express.Request, res: express.Response) {
