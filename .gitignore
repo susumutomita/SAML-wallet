@@ -129,5 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-server.key
-server.crt
+# Keys
+*.pem
+*.key
+*.crt

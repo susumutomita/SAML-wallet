@@ -18,7 +18,6 @@ let samlSpKey: string | null = null;
 if (typeof process.env.SAML_SP_KEY !== 'undefined') {
   samlSpKey = `-----BEGIN PRIVATE KEY-----\n${process.env.SAML_SP_KEY}\n-----END PRIVATE KEY-----`;
 }
-
 let samlStrategy = new SamlStrategy(
   {
     callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
@@ -35,6 +34,11 @@ let samlStrategy = new SamlStrategy(
   }
 );
 passport.use(samlStrategy);
+
+console.log(`SAML_ENTRY_POINT: ${process.env.SAML_ENTRY_POINT}`);
+console.log(`ISSUER: ${process.env.ISSUER}`);
+console.log(`SAML_IDP_CERT: ${process.env.SAML_IDP_CERT}`);
+console.log(`SAML_SP_CERT: ${process.env.SAML_SP_CERT}`);
 
 passport.serializeUser(function (user: any, done: any) {
   done(null, user);
