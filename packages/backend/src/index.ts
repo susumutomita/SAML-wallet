@@ -20,7 +20,7 @@ let samlStrategy = new SamlStrategy(
   {
     callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
     entryPoint: process.env.SAML_ENTRY_POINT,
-    issuer: 'passport-saml',
+    issuer: process.env.ISSUER || 'saml-wallet-backend',
     cert: process.env.SAML_IDP_CERT || '',
     decryptionPvk: samlSpKey || '',
   },
