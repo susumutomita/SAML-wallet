@@ -1,3 +1,7 @@
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import helmet from 'helmet';
 import express from 'express';
 import passport from 'passport';
 import path from 'path';
@@ -41,9 +45,9 @@ let app = express();
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
-app.use(require('morgan')('combined'));
-app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({
+app.use(morgan('combined'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false,
@@ -52,7 +56,7 @@ app.use(require('express-session')({
     secure: process.env.NODE_ENV === "production"
   }
 }));
-app.use(require('helmet')());
+app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(passport.initialize());
