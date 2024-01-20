@@ -133,3 +133,4 @@ dist
 *.pem
 *.key
 *.crt
+.env.cloud
