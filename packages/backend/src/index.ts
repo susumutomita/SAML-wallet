@@ -35,6 +35,7 @@ let samlStrategy = new SamlStrategy(
 );
 passport.use(samlStrategy);
 
+console.log(`SAML entry point: ${process.env.SAML_ENTRY_POINT}`);
 passport.serializeUser(function (user: any, done: any) {
   done(null, user);
 });
