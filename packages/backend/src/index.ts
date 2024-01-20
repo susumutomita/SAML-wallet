@@ -66,9 +66,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', passport.authenticate("saml", { failureRedirect: "/", failureFlash: true }), function (req: express.Request, res: express.Response) {
-  res.status(200).send('Hello');
-});
+app.get(
+  '/',
+  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+  function (req: express.Request, res: express.Response) {
+    res.status(200).send('Hello');
+  }
+);
 
 app.get('/logout', function (req: express.Request, res: express.Response) {
   req.logout(function (err) {
@@ -91,9 +95,13 @@ app.post(
   function (req: express.Request, res: express.Response) {
     const walletCreated = createWallet((req.user as any).saml);
     if (walletCreated) {
-      res.status(200).send('Wallet successfully created for the authenticated user.');
+      res
+        .status(200)
+        .send('Wallet successfully created for the authenticated user.');
     } else {
-      res.status(500).send('Failed to create wallet for the authenticated user.');
+      res
+        .status(500)
+        .send('Failed to create wallet for the authenticated user.');
     }
   }
 );
