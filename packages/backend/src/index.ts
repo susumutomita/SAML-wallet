@@ -89,9 +89,9 @@ app.post(
   function (req: express.Request, res: express.Response) {
     let walletCreated = createWallet((req.user as any).saml);
     if (walletCreated) {
-      res.send('Wallet successfully created for the authenticated user.');
+      res.status(200).send('Wallet successfully created for the authenticated user.');
     } else {
-      res.send('Failed to create wallet for the authenticated user.');
+      res.status(500).send('Failed to create wallet for the authenticated user.');
     }
   }
 );
