@@ -97,7 +97,7 @@ app.post(
     if (walletCreated) {
       res
         .status(200)
-        .send('Wallet successfully created for the authenticated user.');
+        .send(`CreateWallet successfully created for the authenticated user`);
     } else {
       res
         .status(500)
@@ -106,8 +106,8 @@ app.post(
   }
 );
 
-function createWallet(user: any): boolean {
-  console.log(`Creating wallet for user: ${user}`);
+function createWallet(samlProfile: any): boolean {
+  console.log(`Creating wallet for user: ${samlProfile.nameID}`);
   return true;
 }
 
