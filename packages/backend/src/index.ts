@@ -25,7 +25,6 @@ const samlStrategy = new SamlStrategy(
     issuer: process.env.ISSUER || 'saml-wallet-backend',
     cert: process.env.SAML_IDP_CERT || '',
     decryptionPvk: samlSpKey || '',
-    identifierFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
   },
   function (profile: any, done: any) {
     const user: any = {};
