@@ -18,24 +18,23 @@ let samlSpKey: string | null = null;
 if (typeof process.env.SAML_SP_KEY !== 'undefined') {
   samlSpKey = `-----BEGIN PRIVATE KEY-----\n${process.env.SAML_SP_KEY}\n-----END PRIVATE KEY-----`;
 }
-let samlStrategy = new SamlStrategy(
+const samlStrategy = new SamlStrategy(
   {
     callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
     entryPoint: process.env.SAML_ENTRY_POINT,
     issuer: process.env.ISSUER || 'saml-wallet-backend',
     cert: process.env.SAML_IDP_CERT || '',
     decryptionPvk: samlSpKey || '',
+    identifierFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
   },
   function (profile: any, done: any) {
-    let user: any = {};
+    const user: any = {};
     user.saml = profile;
     user.saml.assertionXml = profile.getAssertionXml();
     done(null, user);
   }
 );
 passport.use(samlStrategy);
-
-console.log(`SAML entry point: ${process.env.SAML_ENTRY_POINT}`);
 passport.serializeUser(function (user: any, done: any) {
   done(null, user);
 });
@@ -44,7 +43,7 @@ passport.deserializeUser(function (user: any, done: any) {
   done(null, user);
 });
 
-let app = express();
+const app = express();
 
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
@@ -68,7 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', function (req: express.Request, res: express.Response) {
+app.get('/', passport.authenticate("saml", { failureRedirect: "/", failureFlash: true }), function (req: express.Request, res: express.Response) {
   res.status(200).send('Hello');
 });
 
@@ -81,13 +80,17 @@ app.get('/logout', function (req: express.Request, res: express.Response) {
   });
 });
 
-app.get('/saml/login', passport.authenticate('saml'));
+app.get('/saml/login', (req, res, next) => {
+  console.log('Received a request to /saml/login');
+  passport.authenticate('saml')(req, res, next);
+  console.log('End a request to /saml/login');
+});
 
 app.post(
   '/saml/login/callback',
   passport.authenticate('saml', { failureRedirect: '/' }),
   function (req: express.Request, res: express.Response) {
-    let walletCreated = createWallet((req.user as any).saml);
+    const walletCreated = createWallet((req.user as any).saml);
     if (walletCreated) {
       res.status(200).send('Wallet successfully created for the authenticated user.');
     } else {
