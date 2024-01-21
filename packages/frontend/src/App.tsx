@@ -1,30 +1,57 @@
-import { WagmiConfig, createConfig } from "wagmi";
-import { ConnectKitProvider, getDefaultConfig, ConnectKitButton } from "connectkit";
+import { WagmiConfig, createConfig } from 'wagmi';
+import {
+  ConnectKitProvider,
+  getDefaultConfig,
+  ConnectKitButton,
+} from 'connectkit';
 import React from 'react';
 
 const config = createConfig(
   getDefaultConfig({
     // Required API Keys
-    // alchemyId: process.env.REACT_APP_ALCHEMY_ID, // or infuraId
-    // walletConnectProjectId: process.env.REACT_APP_WALLETCONNECT_PROJECT_ID,
-
-    alchemyId: "l7w079rnkih4phmj", // or infuraId
-    walletConnectProjectId: "76c233c79230f517796b63a296786b63",
-
+    alchemyId: 'l7w079rnkih4phmj', // or infuraId
+    walletConnectProjectId: '76c233c79230f517796b63a296786b63',
     // Required
-    appName: "SAML-Wallet",
-  }),
+    appName: 'SAML-Wallet',
+  })
 );
+
+const buttonStyle = {
+  backgroundColor: '#4CAF50',
+  border: 'none',
+  color: 'white',
+  padding: '15px 32px',
+  textAlign: 'center',
+  textDecoration: 'none',
+  display: 'inline-block',
+  fontSize: '16px',
+  margin: '4px 2px',
+  cursor: 'pointer',
+  borderRadius: '12px',
+};
 
 export const App = () => {
   const handleButtonClick = () => {
-    window.location.href = 'https://saml-wallet-backend.fly.dev/'; // SAMLへのリンクをここに書く
+    window.location.href = 'https://saml-wallet-backend.fly.dev/';
   };
+
   return (
     <WagmiConfig config={config}>
       <ConnectKitProvider>
-        <ConnectKitButton />
-        <button onClick={handleButtonClick}>SAMLへのリンク</button>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+          }}
+        >
+          <ConnectKitButton style={buttonStyle} />
+          <button onClick={handleButtonClick} style={buttonStyle}>
+            SAML
+          </button>
+        </div>
       </ConnectKitProvider>
     </WagmiConfig>
   );
