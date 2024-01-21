@@ -66,6 +66,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+console.log(`SAML_ENTRY_POINT: ${process.env.SAML_ENTRY_POINT}`);
+console.log(`ISSUER: ${process.env.ISSUER}`);
+console.log(`SAML_SP_KEY: ${process.env.SAML_SP_KEY}`);
+console.log(`SAML_SP_CERT: ${process.env.SAML_SP_CERT}`);
+console.log(`CALLBACK_BASE_URL: ${process.env.CALLBACK_BASE_URL}`);
+
 app.get(
   '/',
   passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
