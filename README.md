@@ -11,7 +11,7 @@
 
 # SAML-Wallet: SAML Token-Based Wallet Integration
 
-SAML-Wallet integrates SAML token-based authentication with Web3 technologies, providing secure and efficient digital wallet solutions.
+SAML-Wallet is an enterprise-level project that integrates SAML token-based authentication with Web3 technologies, providing secure and efficient digital wallet solutions.
 
 ## Prerequisites
 
@@ -23,7 +23,17 @@ SAML-Wallet integrates SAML token-based authentication with Web3 technologies, p
 ### Environment Setup
 
 1. Clone the repository and navigate to the project directory.
-2. Copy the `.env_sample` to `.env` and populate it with your specific configurations.
+2. Copy the `.env_sample` to `.env` and populate it with your specific configurations. Use the following placeholders for the required variables:
+
+   ```plaintext
+   MYSQL_ROOT_PASSWORD=<your_mysql_root_password>
+   MYSQL_DATABASE=keycloak
+   MYSQL_USER=keycloak
+   MYSQL_PASSWORD=<your_mysql_password>
+   KEYCLOAK_ADMIN=<your_keycloak_admin_username>
+   KEYCLOAK_ADMIN_PASSWORD=<your_keycloak_admin_password>
+   ```
+
 3. Ensure Docker is running on your machine.
 
 ### Running the Identity Provider (IDP)

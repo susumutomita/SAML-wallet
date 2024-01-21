@@ -10,6 +10,7 @@ import passport from 'passport';
 import path from 'path';
 import url from 'url';
 import { Strategy as SamlStrategy } from 'passport-saml';
+import Web3 from 'web3';
 
 const port: string | number = process.env.PORT || 3000;
 const callbackBaseUrl: string =
@@ -93,11 +94,11 @@ app.post(
   '/saml/login/callback',
   passport.authenticate('saml', { failureRedirect: '/' }),
   function (req: express.Request, res: express.Response) {
-    const walletCreated = createWallet((req.user as any).saml);
+    const walletCreated = createWallet();
     if (walletCreated) {
       res
-        .status(200)
-        .send(`CreateWallet successfully created for the authenticated user`);
+        .status(201)
+        .send(`Wallet created with address: ${walletCreated.address}`);
     } else {
       res
         .status(500)
@@ -106,9 +107,13 @@ app.post(
   }
 );
 
-function createWallet(samlProfile: any): boolean {
-  console.log(`Creating wallet for user: ${samlProfile.nameID}`);
-  return true;
+
+function createWallet(): { address: string; privateKey: string } {
+  const web3 = new Web3();
+  const account = web3.eth.accounts.create();
+  console.log(`Created wallet with address: ${account.address}`);
+  console.log(`Created wallet with private key: ${account.privateKey}`);
+  return { address: account.address, privateKey: account.privateKey };
 }
 
 app.get(
