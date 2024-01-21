@@ -53,7 +53,8 @@ app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || crypto.randomBytes(64).toString('hex'),
+    secret:
+      process.env.SESSION_SECRET || crypto.randomBytes(64).toString('hex'),
     resave: false,
     saveUninitialized: false,
     cookie: {
