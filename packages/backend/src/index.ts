@@ -11,6 +11,7 @@ import path from 'path';
 import url from 'url';
 import { Strategy as SamlStrategy } from 'passport-saml';
 import Web3 from 'web3';
+import crypto from 'crypto';
 
 const port: string | number = process.env.PORT || 3000;
 const callbackBaseUrl: string =
@@ -52,7 +53,7 @@ app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: 'keyboard cat',
+    secret: process.env.SESSION_SECRET || crypto.randomBytes(64).toString('hex'),
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -79,8 +80,10 @@ app.get('/logout', function (req: express.Request, res: express.Response) {
   req.logout(function (err) {
     if (err) {
       console.error(err);
+      res.redirect('/error');
+    } else {
+      res.redirect(process.env.LOGOUT_URL || '/');
     }
-    res.redirect(process.env.LOGOUT_URL || '/');
   });
 });
 
@@ -107,12 +110,10 @@ app.post(
   }
 );
 
-
 function createWallet(): { address: string; privateKey: string } {
   const web3 = new Web3();
   const account = web3.eth.accounts.create();
   console.log(`Created wallet with address: ${account.address}`);
-  console.log(`Created wallet with private key: ${account.privateKey}`);
   return { address: account.address, privateKey: account.privateKey };
 }
 
