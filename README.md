@@ -1,57 +1,72 @@
 <!-- textlint-disable ja-technical-writing/sentence-length -->
 
-[![CI](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml)![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/susumutomita/SAML-wallet)![GitHub top language](https://img.shields.io/github/languages/top/susumutomita/SAML-wallet)![GitHub pull requests](https://img.shields.io/github/issues-pr/susumutomita/SAML-wallet)![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/susumutomita/SAML-wallet)![GitHub repo size](https://img.shields.io/github/repo-size/susumutomita/SAML-wallet)[![Tryvy](https://github.com/susumutomita/SAML-wallet/actions/workflows/tryvy.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/tryvy.yml)[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B37708%2Fgithub.com%2Fsusumutomita%2FSAML-wallet.svg?type=shield&issueType=license)](https://app.fossa.com/projects/custom%2B37708%2Fgithub.com%2Fsusumutomita%2FSAML-wallet?ref=badge_shield&issueType=license)
+[![CI](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/ci.yml)
+![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/susumutomita/SAML-wallet)
+![GitHub top language](https://img.shields.io/github/languages/top/susumutomita/SAML-wallet)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/susumutomita/SAML-wallet)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/susumutomita/SAML-wallet)
+![GitHub repo size](https://img.shields.io/github/repo-size/susumutomita/SAML-wallet)
+[![Tryvy](https://github.com/susumutomita/SAML-wallet/actions/workflows/tryvy.yml/badge.svg?branch=main)](https://github.com/susumutomita/SAML-wallet/actions/workflows/tryvy.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B37708%2Fgithub.com%2Fsusumutomita%2FSAML-wallet.svg?type=shield&issueType=license)](https://app.fossa.com/projects/custom%2B37708%2Fgithub.com%2Fsusumutomita%2FSAML-wallet?ref=badge_shield&issueType=license)
 
-# SAML-Wallet Project Setup Guide
+# SAML-Wallet: SAML Token-Based Wallet Integration
 
-This README explains how to set up the Identity Provider (IDP) Keycloak and other services for the SAML-Wallet project using Docker.
+SAML-Wallet integrates SAML token-based authentication with Web3 technologies, providing secure and efficient digital wallet solutions.
 
 ## Prerequisites
 
-- Docker and Docker Compose are installed.
-- Basic knowledge of Docker.
+- Docker and Docker Compose must be installed on your system.
+- Familiarity with Docker and basic understanding of SAML (Security Assertion Markup Language) and Web3 technologies.
 
-## Setup Instructions
+## Project Setup
 
-### 1. Create Environment Variable File
+### Environment Setup
 
-- Copy the `.env_sample` file and create a `.env` file in the project directory.
-- Update environment variables in the `.env` file, such as passwords (e.g., MYSQL_ROOT_PASSWORD, KEYCLOAK_ADMIN_PASSWORD), to appropriate values.
+1. Clone the repository and navigate to the project directory.
+2. Copy the `.env_sample` to `.env` and populate it with your specific configurations.
+3. Ensure Docker is running on your machine.
 
-### 2. Run IDP
+### Running the Identity Provider (IDP)
 
-- In the root directory of the project, execute the following command to start the Keycloak IDP and MySQL database:
+Run the following command to start Keycloak and MySQL:
 
 ```bash
 docker-compose up -d
 ```
 
-- This command uses Docker Compose to launch the services (MySQL and Keycloak) defined in the `docker-compose.yml` file in the background.
+This will initialize and run the necessary services in detached mode.
 
-### 3. Access Keycloak
+### Accessing Keycloak
 
-- By default, Keycloak starts on port 8080.
-- Access the Keycloak admin console via `http://localhost:8080` in your browser.
-- Use the admin username (KEYCLOAK_ADMIN) and password (KEYCLOAK_ADMIN_PASSWORD) set in your `.env` file for login.
+- Keycloak will be available at `http://localhost:8080`.
+- Log in using the admin credentials provided in your `.env` file.
 
-### 4. Configure Keycloak
+### Configuring Keycloak
 
-- In the Keycloak admin console, configure clients, roles, users, etc.
-- Set up as an Identity Provider based on the SAML protocol.
+- Set up realms, clients (SAML and OpenID Connect), users, and roles.
+- Configure SAML client according to your application's SAML callback URLs and entity IDs.
 
-## Notes
+## Development Notes
 
-- The `.env` file contains sensitive information, so be careful not to include it in your Git repository.
-- If there are any issues with the Docker containers, check the logs using `docker logs [container_name]`.
-- For detailed information on configuring and managing Keycloak, refer to the official Keycloak documentation.
+- The `.env` file should never be committed to version control.
+- Use `docker logs` for troubleshooting container issues.
+- Check out the Keycloak documentation for advanced configuration options.
 
-### 5. Security Considerations
+## Security and Production Readiness
 
-- In a production environment, ensure to use strong passwords for databases and admin accounts.
-- Consider using SSL for encrypting communications between Keycloak and MySQL for enhanced security.
-- Before deploying to production, verify firewall settings and access controls as part of your security measures.
+- Utilize HTTPS in production to secure communication.
+- Regularly update passwords and check for security patches.
+- Apply network security best practices, including firewall rules and restricted access to sensitive endpoints.
 
-### 6. Backup and Recovery
+## Backup and Data Retention
 
-- Regularly backing up the database is recommended.
-- Plan for backup of Keycloak configurations and data for emergency recovery.
+- Implement a backup strategy for your MySQL database and Keycloak configuration.
+- Test recovery procedures to ensure that data restoration is reliable.
+
+## Contribution
+
+- Contributions are welcome! Please read our contributing guidelines and code of conduct before submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
