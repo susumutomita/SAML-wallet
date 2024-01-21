@@ -71,6 +71,8 @@ console.log(`ISSUER: ${process.env.ISSUER}`);
 console.log(`SAML_SP_KEY: ${process.env.SAML_SP_KEY}`);
 console.log(`SAML_SP_CERT: ${process.env.SAML_SP_CERT}`);
 console.log(`CALLBACK_BASE_URL: ${process.env.CALLBACK_BASE_URL}`);
+console.log(`LOGOUT_URL: ${process.env.LOGOUT_URL}`);
+console.log(`PORT: ${process.env.PORT}`);
 
 app.get(
   '/',
