@@ -7,7 +7,7 @@ import express from 'express';
 import passport from 'passport';
 import path from 'path';
 import url from 'url';
-import { MultiSamlStrategy, Strategy } from 'passport-saml';
+import { MultiSamlStrategy } from 'passport-saml';
 import Web3 from 'web3';
 import crypto from 'crypto';
 
@@ -40,14 +40,17 @@ const samlStrategy = new MultiSamlStrategy(
   }
 );
 
-function findProvider(request: any, callback: (err: any, provider: any) => void) {
+function findProvider(
+  request: any,
+  callback: (err: any, provider: any) => void
+) {
   const config = {
     callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
     entryPoint: process.env.SAML_ENTRY_POINT,
     issuer: process.env.ISSUER || 'saml-wallet-backend',
     cert: process.env.SAML_IDP_CERT || '',
     decryptionPvk: samlSpKey || '',
-  }
+  };
   callback(null, config);
 }
 
@@ -142,14 +145,19 @@ app.get(
       samlSpCert = `-----BEGIN CERTIFICATE-----\n${process.env.SAML_SP_CERT}\n-----END CERTIFICATE-----`;
     }
     res.type('application/xml');
-    samlStrategy.generateServiceProviderMetadata(req, samlSpCert, null, (err, metadata) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Failed to generate metadata');
-      } else {
-        res.send(metadata);
+    samlStrategy.generateServiceProviderMetadata(
+      req,
+      samlSpCert,
+      null,
+      (err, metadata) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Failed to generate metadata');
+        } else {
+          res.send(metadata);
+        }
       }
-    });
+    );
   }
 );
 
