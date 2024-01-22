@@ -1,6 +1,4 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import session from 'express-session';
@@ -9,9 +7,11 @@ import express from 'express';
 import passport from 'passport';
 import path from 'path';
 import url from 'url';
-import { Strategy as SamlStrategy } from 'passport-saml';
+import { MultiSamlStrategy, Strategy } from 'passport-saml';
 import Web3 from 'web3';
 import crypto from 'crypto';
+
+dotenv.config();
 
 const port: string | number = process.env.PORT || 3000;
 const callbackBaseUrl: string =
@@ -20,13 +20,17 @@ let samlSpKey: string | null = null;
 if (typeof process.env.SAML_SP_KEY !== 'undefined') {
   samlSpKey = `-----BEGIN PRIVATE KEY-----\n${process.env.SAML_SP_KEY}\n-----END PRIVATE KEY-----`;
 }
-const samlStrategy = new SamlStrategy(
+const samlStrategy = new MultiSamlStrategy(
   {
-    callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
-    entryPoint: process.env.SAML_ENTRY_POINT,
-    issuer: process.env.ISSUER || 'saml-wallet-backend',
-    cert: process.env.SAML_IDP_CERT || '',
-    decryptionPvk: samlSpKey || '',
+    passReqToCallback: true,
+    getSamlOptions: function (request, done) {
+      findProvider(request, function (err, provider) {
+        if (err) {
+          return done(err);
+        }
+        return done(null, provider.configuration);
+      });
+    },
   },
   function (profile: any, done: any) {
     const user: any = {};
@@ -35,6 +39,18 @@ const samlStrategy = new SamlStrategy(
     done(null, user);
   }
 );
+
+function findProvider(request: any, callback: (err: any, provider: any) => void) {
+  const config = {
+    callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
+    entryPoint: process.env.SAML_ENTRY_POINT,
+    issuer: process.env.ISSUER || 'saml-wallet-backend',
+    cert: process.env.SAML_IDP_CERT || '',
+    decryptionPvk: samlSpKey || '',
+  }
+  callback(null, config);
+}
+
 passport.use(samlStrategy);
 passport.serializeUser(function (user: any, done: any) {
   done(null, user);
@@ -126,7 +142,14 @@ app.get(
       samlSpCert = `-----BEGIN CERTIFICATE-----\n${process.env.SAML_SP_CERT}\n-----END CERTIFICATE-----`;
     }
     res.type('application/xml');
-    res.send(samlStrategy.generateServiceProviderMetadata(samlSpCert));
+    samlStrategy.generateServiceProviderMetadata(req, samlSpCert, null, (err, metadata) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Failed to generate metadata');
+      } else {
+        res.send(metadata);
+      }
+    });
   }
 );
 
