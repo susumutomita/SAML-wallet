@@ -36,13 +36,9 @@ const multipleSamlStrategy = new MultiSamlStrategy(
       });
     },
   },
-  function (profile: any, done: any) {
+  function (req: any, profile: any, done: any) {
     const user: any = {};
-    user.saml = profile;
-    console.log('Received SAML profile:');
-    console.log(profile);
-    user.saml.assertionXml = profile.getAssertionXml();
-    done(null, user);
+    return done(null, user);
   }
 );
 
@@ -144,7 +140,6 @@ function createWallet(): { address: string; privateKey: string } {
 }
 
 app.get('/saml/metadata', (req, res) => {
-  const options = req.body; // またはreq.queryやreq.paramsからIdP固有の設定を取得
   multipleSamlStrategy._options.getSamlOptions(
     req,
     (err: Error | null, samlOptions: any) => {
