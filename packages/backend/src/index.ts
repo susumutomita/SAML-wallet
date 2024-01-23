@@ -145,15 +145,18 @@ function createWallet(): { address: string; privateKey: string } {
 
 app.get('/saml/metadata', (req, res) => {
   const options = req.body; // またはreq.queryやreq.paramsからIdP固有の設定を取得
-  multipleSamlStrategy._options.getSamlOptions(req, (err: Error | null, samlOptions: any) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Error obtaining SAML options');
+  multipleSamlStrategy._options.getSamlOptions(
+    req,
+    (err: Error | null, samlOptions: any) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error obtaining SAML options');
+      }
+      const samlObj = new SAML(samlOptions);
+      const metadata = samlObj.generateServiceProviderMetadata(samlSpCert);
+      res.type('application/xml').send(metadata);
     }
-    const samlObj = new SAML(samlOptions);
-    const metadata = samlObj.generateServiceProviderMetadata(samlSpCert);
-    res.type('application/xml').send(metadata);
-  });
+  );
 });
 
 app.listen(Number(port), '0.0.0.0', () =>
