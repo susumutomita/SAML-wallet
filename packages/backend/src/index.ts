@@ -49,7 +49,7 @@ function findProvider(
   const config = {
     callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
     entryPoint: process.env.SAML_ENTRY_POINT,
-    issuer: process.env.ISSUER || 'saml-wallet-backend',
+    issuer: process.env.ISSUER || '',
     cert: process.env.SAML_IDP_CERT || '',
     decryptionPvk: samlSpKey || '',
   };
@@ -93,9 +93,6 @@ app.use(passport.session());
 app.get(
   '/',
   passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
-  function (req: express.Request, res: express.Response) {
-    res.status(200).send('Hello');
-  }
 );
 
 app.get('/logout', function (req: express.Request, res: express.Response) {
