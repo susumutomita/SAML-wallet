@@ -7,7 +7,7 @@ import express from 'express';
 import passport from 'passport';
 import path from 'path';
 import url from 'url';
-import { MultiSamlStrategy } from 'passport-saml';
+import { MultiSamlStrategy, SAML } from 'passport-saml';
 import Web3 from 'web3';
 import crypto from 'crypto';
 
@@ -20,7 +20,11 @@ let samlSpKey: string | null = null;
 if (typeof process.env.SAML_SP_KEY !== 'undefined') {
   samlSpKey = `-----BEGIN PRIVATE KEY-----\n${process.env.SAML_SP_KEY}\n-----END PRIVATE KEY-----`;
 }
-const samlStrategy = new MultiSamlStrategy(
+let samlSpCert: string | null = null;
+if (typeof process.env.SAML_SP_CERT !== 'undefined') {
+  samlSpCert = `-----BEGIN CERTIFICATE-----\n${process.env.SAML_SP_CERT}\n-----END CERTIFICATE-----`;
+}
+const multipleSamlStrategy = new MultiSamlStrategy(
   {
     passReqToCallback: true,
     getSamlOptions: function (request, done) {
@@ -28,13 +32,15 @@ const samlStrategy = new MultiSamlStrategy(
         if (err) {
           return done(err);
         }
-        return done(null, provider.configuration);
+        return done(null, provider);
       });
     },
   },
   function (profile: any, done: any) {
     const user: any = {};
     user.saml = profile;
+    console.log('Received SAML profile:');
+    console.log(profile);
     user.saml.assertionXml = profile.getAssertionXml();
     done(null, user);
   }
@@ -54,7 +60,7 @@ function findProvider(
   callback(null, config);
 }
 
-passport.use(samlStrategy);
+passport.use(multipleSamlStrategy);
 passport.serializeUser(function (user: any, done: any) {
   done(null, user);
 });
@@ -137,29 +143,18 @@ function createWallet(): { address: string; privateKey: string } {
   return { address: account.address, privateKey: account.privateKey };
 }
 
-app.get(
-  '/saml/metadata',
-  function (req: express.Request, res: express.Response) {
-    let samlSpCert: string | null = null;
-    if (typeof process.env.SAML_SP_CERT !== 'undefined') {
-      samlSpCert = `-----BEGIN CERTIFICATE-----\n${process.env.SAML_SP_CERT}\n-----END CERTIFICATE-----`;
+app.get('/saml/metadata', (req, res) => {
+  const options = req.body; // またはreq.queryやreq.paramsからIdP固有の設定を取得
+  multipleSamlStrategy._options.getSamlOptions(req, (err: Error | null, samlOptions: any) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error obtaining SAML options');
     }
-    res.type('application/xml');
-    samlStrategy.generateServiceProviderMetadata(
-      req,
-      samlSpCert,
-      null,
-      (err, metadata) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send('Failed to generate metadata');
-        } else {
-          res.send(metadata);
-        }
-      }
-    );
-  }
-);
+    const samlObj = new SAML(samlOptions);
+    const metadata = samlObj.generateServiceProviderMetadata(samlSpCert);
+    res.type('application/xml').send(metadata);
+  });
+});
 
 app.listen(Number(port), '0.0.0.0', () =>
   console.log(`Listening on port ${port}`)
