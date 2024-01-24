@@ -46,15 +46,26 @@ function findProvider(
   request: any,
   callback: (err: any, provider: any) => void
 ) {
-  const config = {
+  const config = idpConfigs['idp1'];
+  callback(null, config);
+}
+
+const idpConfigs = {
+  idp1: {
     callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
     entryPoint: process.env.SAML_ENTRY_POINT,
     issuer: process.env.ISSUER || '',
     cert: process.env.SAML_IDP_CERT || '',
     decryptionPvk: samlSpKey || '',
-  };
-  callback(null, config);
-}
+  },
+  idp2: {
+    callbackUrl: url.resolve(callbackBaseUrl, 'saml/login/callback'),
+    entryPoint: process.env.SAML_ENTRY_POINT,
+    issuer: process.env.ISSUER_SECOND || '',
+    cert: process.env.SAML_IDP_CERT_SECOND || '',
+    decryptionPvk: samlSpKey || '',
+  },
+};
 
 passport.use(multipleSamlStrategy);
 passport.serializeUser(function (user: any, done: any) {
