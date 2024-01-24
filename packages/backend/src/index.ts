@@ -92,7 +92,7 @@ app.use(passport.session());
 
 app.get(
   '/',
-  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+  passport.authenticate('saml', { failureRedirect: '/', failureFlash: true })
 );
 
 app.get('/logout', function (req: express.Request, res: express.Response) {
